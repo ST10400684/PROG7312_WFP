@@ -18,18 +18,18 @@ namespace PROG7312_WFP
         {
             DateReported = DateTime.Now;
             Status = "Submitted";
-            Location = "";
-            Category = "";
-            Description = "";
-            AttachedFilePath = "";
+            Location = string.Empty;
+            Category = string.Empty;
+            Description = string.Empty;
+            AttachedFilePath = string.Empty;
         }
 
         public Issue(string location, string category, string description, string filePath = "")
         {
-            Location = location ?? "";
-            Category = category ?? "";
-            Description = description ?? "";
-            AttachedFilePath = filePath ?? "";
+            Location = location ?? string.Empty;
+            Category = category ?? string.Empty;
+            Description = description ?? string.Empty;
+            AttachedFilePath = filePath ?? string.Empty;
             DateReported = DateTime.Now;
             Status = "Submitted";
         }
@@ -53,8 +53,7 @@ namespace PROG7312_WFP
 
     public static class IssueManager
     {
-        private static List<Issue> reportedIssues = new List<Issue>();
-
+        private static LinkedList<Issue> reportedIssues = new LinkedList<Issue>();
         private static int nextId = 1001;
 
         public static void AddIssue(Issue issue)
@@ -63,7 +62,7 @@ namespace PROG7312_WFP
                 throw new ArgumentNullException(nameof(issue));
 
             issue.IssueId = nextId++;
-            reportedIssues.Add(issue);
+            reportedIssues.AddLast(issue);
         }
 
         public static Issue CreateAndAddIssue(string location, string category, string description, string filePath = "")
@@ -73,43 +72,14 @@ namespace PROG7312_WFP
             return issue;
         }
 
-        public static List<Issue> GetAllIssues()
-        {
-            return new List<Issue>(reportedIssues); 
-        }
-
         public static Issue GetIssueById(int id)
         {
             return reportedIssues.FirstOrDefault(issue => issue.IssueId == id);
         }
 
-        public static int GetTotalIssueCount()
+        public static List<Issue> GetAllIssues()
         {
-            return reportedIssues.Count;
-        }
-
-        public static List<Issue> GetIssuesByCategory(string category)
-        {
-            if (string.IsNullOrWhiteSpace(category))
-                return new List<Issue>();
-
-            return reportedIssues.Where(issue =>
-                issue.Category.Equals(category, StringComparison.OrdinalIgnoreCase)).ToList();
-        }
-
-        public static List<Issue> GetIssuesByStatus(string status)
-        {
-            if (string.IsNullOrWhiteSpace(status))
-                return new List<Issue>();
-
-            return reportedIssues.Where(issue =>
-                issue.Status.Equals(status, StringComparison.OrdinalIgnoreCase)).ToList();
-        }
-
-        public static List<Issue> GetIssuesByDateRange(DateTime startDate, DateTime endDate)
-        {
-            return reportedIssues.Where(issue =>
-                issue.DateReported >= startDate && issue.DateReported <= endDate).ToList();
+            return reportedIssues.ToList();
         }
 
         public static bool UpdateIssueStatus(int issueId, string newStatus)
@@ -121,6 +91,21 @@ namespace PROG7312_WFP
                 return true;
             }
             return false;
+        }
+
+        public static bool RemoveIssue(int issueId)
+        {
+            var issue = GetIssueById(issueId);
+            if (issue != null)
+            {
+                return reportedIssues.Remove(issue);
+            }
+            return false;
+        }
+
+        public static int GetTotalIssueCount()
+        {
+            return reportedIssues.Count;
         }
 
         public static Dictionary<string, int> GetCategorySummary()
@@ -149,14 +134,9 @@ namespace PROG7312_WFP
                 issue.Category.ToLower().Contains(searchText)).ToList();
         }
 
-        public static bool RemoveIssue(int issueId)
+        public static List<Issue> GetIssuesReverseChronological()
         {
-            var issue = GetIssueById(issueId);
-            if (issue != null)
-            {
-                return reportedIssues.Remove(issue);
-            }
-            return false;
+            return reportedIssues.Reverse().ToList();
         }
 
         public static void ClearAllIssues()
@@ -164,13 +144,5 @@ namespace PROG7312_WFP
             reportedIssues.Clear();
             nextId = 1001;
         }
-        //
-        public static List<Issue> GetRecentIssues(int count = 10)
-        {
-            return reportedIssues
-                .OrderByDescending(issue => issue.DateReported)
-                .Take(count)
-                .ToList();
-        }
     }
-} 
+}
