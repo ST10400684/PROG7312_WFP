@@ -31,6 +31,11 @@
             button1 = new Button();
             button2 = new Button();
             button3 = new Button();
+            menuStrip1 = new MenuStrip();
+            knoppie1ToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripMenuItem();
+            toolStripMenuItem2 = new ToolStripMenuItem();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // button1
@@ -65,6 +70,35 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { knoppie1ToolStripMenuItem, toolStripMenuItem1, toolStripMenuItem2 });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(800, 24);
+            menuStrip1.TabIndex = 3;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // knoppie1ToolStripMenuItem
+            // 
+            knoppie1ToolStripMenuItem.Name = "knoppie1ToolStripMenuItem";
+            knoppie1ToolStripMenuItem.Size = new Size(69, 20);
+            knoppie1ToolStripMenuItem.Text = "Knoppie1";
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(72, 20);
+            toolStripMenuItem1.Text = "Knoppie 2";
+            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
+            // 
+            // toolStripMenuItem2
+            // 
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            toolStripMenuItem2.Size = new Size(72, 20);
+            toolStripMenuItem2.Text = "Knoppie 3";
+            toolStripMenuItem2.Click += toolStripMenuItem2_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -73,10 +107,15 @@
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -84,5 +123,9 @@
         private Button button1;
         private Button button2;
         private Button button3;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem knoppie1ToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem toolStripMenuItem2;
     }
 }

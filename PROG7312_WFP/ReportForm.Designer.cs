@@ -2,15 +2,10 @@
 {
     partial class ReportForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
+        
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,10 +17,6 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
@@ -39,9 +30,9 @@
             this.btnBack = new System.Windows.Forms.Button();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
+            
             // label1
-            // 
+           
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(147, 83);
             this.label1.Name = "label1";
@@ -49,17 +40,17 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "label1";
             this.label1.Click += new System.EventHandler(this.label1_Click);
-            // 
+            
             // txtLocation
-            // 
+            
             this.txtLocation.Location = new System.Drawing.Point(272, 80);
             this.txtLocation.Name = "txtLocation";
             this.txtLocation.Size = new System.Drawing.Size(100, 23);
             this.txtLocation.TabIndex = 1;
             this.txtLocation.TextChanged += new System.EventHandler(this.txtLocation_TextChanged);
-            // 
+            
             // label2
-            // 
+             
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(147, 133);
             this.label2.Name = "label2";
