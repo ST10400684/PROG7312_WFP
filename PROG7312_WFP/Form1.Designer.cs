@@ -21,7 +21,9 @@
             reportIssuesToolStripMenuItem = new ToolStripMenuItem();
             localEventsToolStripMenuItem = new ToolStripMenuItem();
             serviceStatusToolStripMenuItem = new ToolStripMenuItem();
+            pictureBox1 = new PictureBox();
             menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -54,11 +56,24 @@
             serviceStatusToolStripMenuItem.Text = "Service Request Status";
             serviceStatusToolStripMenuItem.Click += toolStripMenuItem2_Click;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Dock = DockStyle.Fill;
+            pictureBox1.Image = Properties.Resources.images;
+            pictureBox1.Location = new Point(0, 24);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(800, 426);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 4;
+            pictureBox1.TabStop = false;
+            pictureBox1.Click += pictureBox1_Click_1;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(pictureBox1);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "Form1";
@@ -66,6 +81,7 @@
             Load += Form1_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -75,5 +91,6 @@
         private System.Windows.Forms.ToolStripMenuItem reportIssuesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem localEventsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem serviceStatusToolStripMenuItem;
+        private PictureBox pictureBox1;
     }
 }
