@@ -1,0 +1,326 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace PROG7312_WFP
+{
+    public partial class EventsForm : Form
+    {
+        private List<Event> currentEvents = new List<Event>();
+        private string currentSortMethod = "Date (Ascending)";
+
+        public EventsForm()
+        {
+            InitializeComponent();
+        }
+
+        private void EventsForm_Load(object sender, EventArgs e)
+        {
+            // Initialize sample data if not already loaded
+            if (EventManager.GetTotalEventCount() == 0)
+            {
+                EventManager.InitializeSampleData();
+            }
+
+            // Convert reported issues to events
+            LoadIssuesAsEvents();
+
+            // Populate category dropdown
+            LoadCategories();
+
+            // Populate sort dropdown
+            LoadSortOptions();
+
+            // Load all events initially
+            LoadEvents();
+
+            // Load recommendations
+            LoadRecommendations();
+
+            UpdateStatusBar();
+        }
+
+        private void LoadIssuesAsEvents()
+        {
+            var issues = IssueManager.GetAllIssues();
+
+            if (issues.Count > 0)
+            {
+                foreach (var issue in issues)
+                {
+                    // Convert each issue to an announcement/event
+                    var issueEvent = new Event
+                    {
+                        EventId = 9000 + issue.IssueId, // Offset ID to avoid conflicts
+                        Title = $"Issue Report: {issue.Category}",
+                        Category = "Community Issues",
+                        EventDate = issue.DateReported,
+                        Description = $"Location: {issue.Location}\n\n{issue.Description}\n\nStatus: {issue.Status}\n\nReported Issue ID: #{issue.IssueId}",
+                        Location = issue.Location,
+                        Organizer = "Municipal Services - Citizen Report",
+                        IsFeatured = issue.Status == "Under Review" || issue.Status == "In Progress"
+                    };
+
+                    EventManager.AddEvent(issueEvent);
+                }
+            }
+        }
+
+        private void LoadCategories()
+        {
+            cmbCategory.Items.Clear();
+            cmbCategory.Items.Add("All Categories");
+
+            var categories = EventManager.GetAllCategories().OrderBy(c => c);
+            foreach (var category in categories)
+            {
+                cmbCategory.Items.Add(category);
+            }
+
+            cmbCategory.SelectedIndex = 0;
+        }
+
+        private void LoadSortOptions()
+        {
+            cmbSort.Items.Clear();
+            cmbSort.Items.AddRange(new string[]
+            {
+                "Date (Ascending)",
+                "Date (Descending)",
+                "Title (A-Z)",
+                "Title (Z-A)",
+                "Category"
+            });
+            cmbSort.SelectedIndex = 0;
+        }
+
+        private void LoadEvents(List<Event> events = null)
+        {
+            if (events == null)
+            {
+                events = EventManager.GetAllEvents();
+            }
+
+            currentEvents = EventManager.SortEvents(events, currentSortMethod);
+
+            lstEvents.Items.Clear();
+            foreach (var evt in currentEvents)
+            {
+                lstEvents.Items.Add(evt);
+            }
+
+            UpdateStatusBar();
+        }
+
+        private void LoadRecommendations()
+        {
+            lstRecommendations.Items.Clear();
+            var recommendations = EventManager.GetRecommendedEvents();
+
+            if (recommendations.Count == 0)
+            {
+                lstRecommendations.Items.Add("Search for events to get personalized recommendations!");
+            }
+            else
+            {
+                foreach (var evt in recommendations)
+                {
+                    lstRecommendations.Items.Add(evt);
+                }
+            }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string category = cmbCategory.SelectedItem?.ToString();
+            if (category == "All Categories") category = null;
+
+            DateTime? date = null;
+            if (chkUseDate.Checked)
+            {
+                date = dtpEventDate.Value.Date;
+            }
+
+            string searchText = txtSearchKeyword.Text.Trim();
+            if (string.IsNullOrEmpty(searchText)) searchText = null;
+
+            var results = EventManager.SearchEvents(category, date, searchText);
+            LoadEvents(results);
+
+            // Update recommendations based on new search patterns
+            LoadRecommendations();
+
+            lblStatus.Text = $"Found {results.Count} event(s) matching your criteria";
+        }
+
+        private void btnClearFilters_Click(object sender, EventArgs e)
+        {
+            txtSearchKeyword.Clear();
+            cmbCategory.SelectedIndex = 0;
+            chkUseDate.Checked = false;
+            dtpEventDate.Value = DateTime.Now;
+
+            LoadEvents();
+            lblStatus.Text = "Filters cleared. Showing all events.";
+        }
+
+        private void cmbSort_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            currentSortMethod = cmbSort.SelectedItem?.ToString() ?? "Date (Ascending)";
+            LoadEvents(currentEvents);
+        }
+
+        private void lstEvents_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstEvents.SelectedItem is Event selectedEvent)
+            {
+                DisplayEventDetails(selectedEvent);
+                EventManager.TrackEventView(selectedEvent);
+            }
+        }
+
+        private void DisplayEventDetails(Event evt)
+        {
+            rtbEventDetails.Clear();
+
+            // Title
+            rtbEventDetails.SelectionFont = new Font("Segoe UI", 14, FontStyle.Bold);
+            rtbEventDetails.SelectionColor = Color.FromArgb(41, 128, 185);
+            rtbEventDetails.AppendText(evt.Title + "\n\n");
+
+            // Category badge
+            rtbEventDetails.SelectionFont = new Font("Segoe UI", 9, FontStyle.Bold);
+            rtbEventDetails.SelectionColor = Color.White;
+            rtbEventDetails.SelectionBackColor = GetCategoryColor(evt.Category);
+            rtbEventDetails.AppendText($" {evt.Category} ");
+            rtbEventDetails.SelectionBackColor = Color.White;
+
+            if (evt.IsFeatured)
+            {
+                rtbEventDetails.SelectionBackColor = Color.Gold;
+                rtbEventDetails.SelectionColor = Color.Black;
+                rtbEventDetails.AppendText(" ⭐ FEATURED ");
+                rtbEventDetails.SelectionBackColor = Color.White;
+            }
+
+            rtbEventDetails.AppendText("\n\n");
+
+            // Date and Time
+            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            rtbEventDetails.SelectionColor = Color.Black;
+            rtbEventDetails.AppendText("📅 Date & Time:\n");
+            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
+            rtbEventDetails.SelectionColor = Color.DimGray;
+            rtbEventDetails.AppendText($"{evt.EventDate:dddd, MMMM dd, yyyy 'at' hh:mm tt}\n\n");
+
+            // Location
+            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            rtbEventDetails.SelectionColor = Color.Black;
+            rtbEventDetails.AppendText("📍 Location:\n");
+            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
+            rtbEventDetails.SelectionColor = Color.DimGray;
+            rtbEventDetails.AppendText($"{evt.Location}\n\n");
+
+            // Organizer
+            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            rtbEventDetails.SelectionColor = Color.Black;
+            rtbEventDetails.AppendText("👥 Organizer:\n");
+            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
+            rtbEventDetails.SelectionColor = Color.DimGray;
+            rtbEventDetails.AppendText($"{evt.Organizer}\n\n");
+
+            // Description
+            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            rtbEventDetails.SelectionColor = Color.Black;
+            rtbEventDetails.AppendText("📝 Description:\n");
+            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
+            rtbEventDetails.SelectionColor = Color.DimGray;
+            rtbEventDetails.AppendText($"{evt.Description}\n");
+
+            rtbEventDetails.SelectionStart = 0;
+            rtbEventDetails.ScrollToCaret();
+        }
+
+        private Color GetCategoryColor(string category)
+        {
+            return category switch
+            {
+                "Government" => Color.FromArgb(52, 73, 94),
+                "Community" => Color.FromArgb(46, 204, 113),
+                "Community Issues" => Color.FromArgb(231, 76, 60), // Red for reported issues
+                "Education" => Color.FromArgb(52, 152, 219),
+                "Culture" => Color.FromArgb(155, 89, 182),
+                "Infrastructure" => Color.FromArgb(230, 126, 34),
+                "Sports" => Color.FromArgb(231, 76, 60),
+                "Business" => Color.FromArgb(26, 188, 156),
+                "Safety" => Color.FromArgb(192, 57, 43),
+                "Environment" => Color.FromArgb(39, 174, 96),
+                "Health" => Color.FromArgb(41, 128, 185),
+                _ => Color.Gray
+            };
+        }
+
+        private void btnViewRecommendation_Click(object sender, EventArgs e)
+        {
+            if (lstRecommendations.SelectedItem is Event selectedEvent)
+            {
+                // Find and select this event in the main list
+                for (int i = 0; i < lstEvents.Items.Count; i++)
+                {
+                    if (lstEvents.Items[i] is Event evt && evt.EventId == selectedEvent.EventId)
+                    {
+                        lstEvents.SelectedIndex = i;
+                        lstEvents.TopIndex = i;
+                        break;
+                    }
+                }
+
+                // If not in current view, show all events and try again
+                if (lstEvents.SelectedItem == null ||
+                    (lstEvents.SelectedItem is Event currentEvt && currentEvt.EventId != selectedEvent.EventId))
+                {
+                    btnClearFilters_Click(sender, e);
+
+                    for (int i = 0; i < lstEvents.Items.Count; i++)
+                    {
+                        if (lstEvents.Items[i] is Event evt && evt.EventId == selectedEvent.EventId)
+                        {
+                            lstEvents.SelectedIndex = i;
+                            lstEvents.TopIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a recommended event to view.", "No Selection",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void chkUseDate_CheckedChanged(object sender, EventArgs e)
+        {
+            dtpEventDate.Enabled = chkUseDate.Checked;
+        }
+
+        private void UpdateStatusBar()
+        {
+            var stats = EventManager.GetCategoryStatistics();
+            int totalEvents = currentEvents.Count;
+            int allEvents = EventManager.GetTotalEventCount();
+
+            lblStatus.Text = $"Displaying {totalEvents} of {allEvents} total events | " +
+                           $"Categories: {stats.Count}";
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            Form1 mainForm = new Form1();
+            mainForm.Show();
+            this.Close();
+        }
+    }
+}

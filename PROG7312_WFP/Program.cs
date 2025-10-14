@@ -11,6 +11,10 @@ namespace PROG7312_WFP
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+
+            // Load sample issues on startup
+            IssueSampleData.LoadSampleIssues();
+
             Application.Run(new Form1());
         }
     }
