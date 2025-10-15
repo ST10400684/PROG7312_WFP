@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 
+
+// ---------- COPILOT Edited this class for me to make it that it saves the requests to a text file because mine was not saving for some reason
 namespace PROG7312_WFP
 {
     public class Issue
@@ -53,96 +57,221 @@ namespace PROG7312_WFP
 
     public static class IssueManager
     {
-        private static LinkedList<Issue> reportedIssues = new LinkedList<Issue>();
-        private static int nextId = 1001;
+        private static readonly LinkedList<Issue> allReportedIssues = new LinkedList<Issue>();
+        private static int nextAvailableIssueId = 1001;
+        private static readonly object syncLock = new object();
 
-        public static void AddIssue(Issue issue)
+        // Persistence file path inside AppData\PROG7312_WFP\issues.json
+        private static readonly string storageFilePath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "PROG7312_WFP",
+            "issues.json"
+        );
+
+        static IssueManager()
         {
-            if (issue == null)
-                throw new ArgumentNullException(nameof(issue));
-
-            issue.IssueId = nextId++;
-            reportedIssues.AddLast(issue);
+            LoadIssuesFromFile();
         }
 
-        public static Issue CreateAndAddIssue(string location, string category, string description, string filePath = "")
+        public static void AddIssue(Issue issueToAdd)
         {
-            var issue = new Issue(location, category, description, filePath);
-            AddIssue(issue);
-            return issue;
+            if (issueToAdd == null)
+                throw new ArgumentNullException(nameof(issueToAdd));
+
+            lock (syncLock)
+            {
+                issueToAdd.IssueId = nextAvailableIssueId++;
+                allReportedIssues.AddLast(issueToAdd);
+                SaveIssuesToFile();
+            }
         }
 
-        public static Issue GetIssueById(int id)
+        public static Issue CreateIssueAndAddToList(string location, string category, string description, string filePath = "")
         {
-            return reportedIssues.FirstOrDefault(issue => issue.IssueId == id);
+            var newIssue = new Issue(location, category, description, filePath);
+            AddIssue(newIssue);
+            return newIssue;
+        }
+
+        public static Issue GetIssueById(int issueId)
+        {
+            lock (syncLock)
+            {
+                return allReportedIssues.FirstOrDefault(issue => issue.IssueId == issueId);
+            }
         }
 
         public static List<Issue> GetAllIssues()
         {
-            return reportedIssues.ToList();
+            lock (syncLock)
+            {
+                return allReportedIssues.ToList();
+            }
         }
 
         public static bool UpdateIssueStatus(int issueId, string newStatus)
         {
-            var issue = GetIssueById(issueId);
-            if (issue != null)
+            lock (syncLock)
             {
-                issue.Status = newStatus ?? "Submitted";
-                return true;
+                var issueToUpdate = GetIssueById(issueId);
+                if (issueToUpdate != null)
+                {
+                    issueToUpdate.Status = newStatus ?? "Submitted";
+                    SaveIssuesToFile();
+                    return true;
+                }
+                return false;
             }
-            return false;
         }
 
         public static bool RemoveIssue(int issueId)
         {
-            var issue = GetIssueById(issueId);
-            if (issue != null)
+            lock (syncLock)
             {
-                return reportedIssues.Remove(issue);
+                var issueToRemove = GetIssueById(issueId);
+                if (issueToRemove != null)
+                {
+                    var removed = allReportedIssues.Remove(issueToRemove);
+                    if (removed) SaveIssuesToFile();
+                    return removed;
+                }
+                return false;
             }
-            return false;
         }
 
         public static int GetTotalIssueCount()
         {
-            return reportedIssues.Count;
+            lock (syncLock)
+            {
+                return allReportedIssues.Count;
+            }
         }
 
         public static Dictionary<string, int> GetCategorySummary()
         {
-            return reportedIssues
-                .GroupBy(issue => issue.Category)
-                .ToDictionary(group => group.Key, group => group.Count());
+            lock (syncLock)
+            {
+                return allReportedIssues
+                    .GroupBy(issue => issue.Category)
+                    .ToDictionary(categoryGroup => categoryGroup.Key, categoryGroup => categoryGroup.Count());
+            }
         }
 
         public static Dictionary<string, int> GetStatusSummary()
         {
-            return reportedIssues
-                .GroupBy(issue => issue.Status)
-                .ToDictionary(group => group.Key, group => group.Count());
+            lock (syncLock)
+            {
+                return allReportedIssues
+                    .GroupBy(issue => issue.Status)
+                    .ToDictionary(statusGroup => statusGroup.Key, statusGroup => statusGroup.Count());
+            }
         }
 
-        public static List<Issue> SearchIssues(string searchText)
+        public static List<Issue> SearchIssues(string searchKeyword)
         {
-            if (string.IsNullOrWhiteSpace(searchText))
+            if (string.IsNullOrWhiteSpace(searchKeyword))
                 return new List<Issue>();
 
-            searchText = searchText.ToLower();
-            return reportedIssues.Where(issue =>
-                issue.Location.ToLower().Contains(searchText) ||
-                issue.Description.ToLower().Contains(searchText) ||
-                issue.Category.ToLower().Contains(searchText)).ToList();
+            searchKeyword = searchKeyword.ToLower();
+            lock (syncLock)
+            {
+                return allReportedIssues.Where(issue =>
+                    issue.Location.ToLower().Contains(searchKeyword) ||
+                    issue.Description.ToLower().Contains(searchKeyword) ||
+                    issue.Category.ToLower().Contains(searchKeyword)).ToList();
+            }
         }
 
         public static List<Issue> GetIssuesReverseChronological()
         {
-            return reportedIssues.Reverse().ToList();
+            lock (syncLock)
+            {
+                return allReportedIssues.Reverse().ToList();
+            }
         }
 
         public static void ClearAllIssues()
         {
-            reportedIssues.Clear();
-            nextId = 1001;
+            lock (syncLock)
+            {
+                allReportedIssues.Clear();
+                nextAvailableIssueId = 1001;
+                SaveIssuesToFile();
+            }
+        }
+
+        // Persistence helpers
+        private class IssueStore
+        {
+            public List<Issue> Issues { get; set; } = new List<Issue>();
+            public int NextId { get; set; }
+        }
+
+        private static void SaveIssuesToFile()
+        {
+            try
+            {
+                var dir = Path.GetDirectoryName(storageFilePath);
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+
+                var store = new IssueStore
+                {
+                    Issues = allReportedIssues.ToList(),
+                    NextId = nextAvailableIssueId
+                };
+
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                };
+
+                var json = JsonSerializer.Serialize(store, options);
+                File.WriteAllText(storageFilePath, json);
+            }
+            catch
+            {
+                // Silent catch to avoid crashing the UI; in production consider logging properly.
+            }
+        }
+
+        private static void LoadIssuesFromFile()
+        {
+            try
+            {
+                if (!File.Exists(storageFilePath)) return;
+
+                var json = File.ReadAllText(storageFilePath);
+                if (string.IsNullOrWhiteSpace(json)) return;
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                var store = JsonSerializer.Deserialize<IssueStore>(json, options);
+                if (store != null)
+                {
+                    lock (syncLock)
+                    {
+                        allReportedIssues.Clear();
+                        foreach (var issue in store.Issues.OrderBy(i => i.IssueId))
+                            allReportedIssues.AddLast(issue);
+
+                        // Restore next id; if missing or lower than existing max, compute next
+                        if (store.NextId > 0)
+                            nextAvailableIssueId = store.NextId;
+                        else if (allReportedIssues.Any())
+                            nextAvailableIssueId = allReportedIssues.Max(i => i.IssueId) + 1;
+                        else
+                            nextAvailableIssueId = 1001;
+                    }
+                }
+            }
+            catch
+            {
+                // Silent catch to avoid crashing the UI; in production consider logging properly.
+            }
         }
     }
 }

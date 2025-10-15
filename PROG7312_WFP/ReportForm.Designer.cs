@@ -2,10 +2,10 @@
 {
     partial class ReportForm
     {
-        
+
         private System.ComponentModel.IContainer components = null;
 
-        
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,17 +22,17 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtLocation = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.cmbCategory = new System.Windows.Forms.ComboBox();
+            this.comboBoxCategory = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.rtbDescription = new System.Windows.Forms.RichTextBox();
             this.btnUpload = new System.Windows.Forms.Button();
-            this.ofdAttachment = new System.Windows.Forms.OpenFileDialog();
+            this.fileAttachmentDialog = new System.Windows.Forms.OpenFileDialog();
             this.btnBack = new System.Windows.Forms.Button();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            
+
             // label1
-           
+
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(147, 83);
             this.label1.Name = "label1";
@@ -40,17 +40,17 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "label1";
             this.label1.Click += new System.EventHandler(this.label1_Click);
-            
+
             // txtLocation
-            
+
             this.txtLocation.Location = new System.Drawing.Point(272, 80);
             this.txtLocation.Name = "txtLocation";
             this.txtLocation.Size = new System.Drawing.Size(100, 23);
             this.txtLocation.TabIndex = 1;
             this.txtLocation.TextChanged += new System.EventHandler(this.txtLocation_TextChanged);
-            
+
             // label2
-             
+
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(147, 133);
             this.label2.Name = "label2";
@@ -59,14 +59,14 @@
             this.label2.Text = "label2";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
-            // cmbCategory
+            // comboBoxCategory
             // 
-            this.cmbCategory.FormattingEnabled = true;
-            this.cmbCategory.Location = new System.Drawing.Point(261, 130);
-            this.cmbCategory.Name = "cmbCategory";
-            this.cmbCategory.Size = new System.Drawing.Size(121, 23);
-            this.cmbCategory.TabIndex = 3;
-            this.cmbCategory.SelectedIndexChanged += new System.EventHandler(this.cmbCategory_SelectedIndexChanged);
+            this.comboBoxCategory.FormattingEnabled = true;
+            this.comboBoxCategory.Location = new System.Drawing.Point(261, 130);
+            this.comboBoxCategory.Name = "comboBoxCategory";
+            this.comboBoxCategory.Size = new System.Drawing.Size(121, 23);
+            this.comboBoxCategory.TabIndex = 3;
+            this.comboBoxCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxCategory_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -97,10 +97,10 @@
             this.btnUpload.UseVisualStyleBackColor = true;
             this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
             // 
-            // ofdAttachment
+            // fileAttachmentDialog
             // 
-            this.ofdAttachment.FileName = "openFileDialog1";
-            this.ofdAttachment.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
+            this.fileAttachmentDialog.FileName = "openFileDialog1";
+            this.fileAttachmentDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
             // btnBack
             // 
@@ -132,7 +132,7 @@
             this.Controls.Add(this.btnUpload);
             this.Controls.Add(this.rtbDescription);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.cmbCategory);
+            this.Controls.Add(this.comboBoxCategory);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtLocation);
             this.Controls.Add(this.label1);
@@ -147,11 +147,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtLocation;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox cmbCategory;
+        private System.Windows.Forms.ComboBox comboBoxCategory;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RichTextBox rtbDescription;
         private System.Windows.Forms.Button btnUpload;
-        private System.Windows.Forms.OpenFileDialog ofdAttachment;
+        private System.Windows.Forms.OpenFileDialog fileAttachmentDialog;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button btnSubmit;
     }

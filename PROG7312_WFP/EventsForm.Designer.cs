@@ -2,8 +2,15 @@
 {
     partial class EventsForm
     {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -15,6 +22,10 @@
 
         #region Windows Form Designer generated code
 
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
         private void InitializeComponent()
         {
             this.panelTop = new System.Windows.Forms.Panel();
@@ -24,22 +35,22 @@
             this.lblSearchKeyword = new System.Windows.Forms.Label();
             this.txtSearchKeyword = new System.Windows.Forms.TextBox();
             this.lblCategory = new System.Windows.Forms.Label();
-            this.cmbCategory = new System.Windows.Forms.ComboBox();
+            this.comboBoxCategory = new System.Windows.Forms.ComboBox();
             this.lblDate = new System.Windows.Forms.Label();
-            this.dtpEventDate = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerEventDate = new System.Windows.Forms.DateTimePicker();
             this.chkUseDate = new System.Windows.Forms.CheckBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClearFilters = new System.Windows.Forms.Button();
             this.panelSort = new System.Windows.Forms.Panel();
             this.lblSort = new System.Windows.Forms.Label();
-            this.cmbSort = new System.Windows.Forms.ComboBox();
+            this.comboBoxSortOptions = new System.Windows.Forms.ComboBox();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.lstEvents = new System.Windows.Forms.ListBox();
+            this.listBoxEvents = new System.Windows.Forms.ListBox();
             this.panelDetails = new System.Windows.Forms.Panel();
-            this.rtbEventDetails = new System.Windows.Forms.RichTextBox();
+            this.richTextBoxEventDetails = new System.Windows.Forms.RichTextBox();
             this.panelRecommendations = new System.Windows.Forms.Panel();
             this.lblRecommendations = new System.Windows.Forms.Label();
-            this.lstRecommendations = new System.Windows.Forms.ListBox();
+            this.listBoxRecommendations = new System.Windows.Forms.ListBox();
             this.btnViewRecommendation = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
@@ -97,9 +108,9 @@
             this.panelSearch.Controls.Add(this.lblSearchKeyword);
             this.panelSearch.Controls.Add(this.txtSearchKeyword);
             this.panelSearch.Controls.Add(this.lblCategory);
-            this.panelSearch.Controls.Add(this.cmbCategory);
+            this.panelSearch.Controls.Add(this.comboBoxCategory);
             this.panelSearch.Controls.Add(this.lblDate);
-            this.panelSearch.Controls.Add(this.dtpEventDate);
+            this.panelSearch.Controls.Add(this.dateTimePickerEventDate);
             this.panelSearch.Controls.Add(this.chkUseDate);
             this.panelSearch.Controls.Add(this.btnSearch);
             this.panelSearch.Controls.Add(this.btnClearFilters);
@@ -136,14 +147,14 @@
             this.lblCategory.TabIndex = 2;
             this.lblCategory.Text = "Category:";
             // 
-            // cmbCategory
+            // comboBoxCategory
             // 
-            this.cmbCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbCategory.FormattingEnabled = true;
-            this.cmbCategory.Location = new System.Drawing.Point(235, 35);
-            this.cmbCategory.Name = "cmbCategory";
-            this.cmbCategory.Size = new System.Drawing.Size(180, 23);
-            this.cmbCategory.TabIndex = 3;
+            this.comboBoxCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCategory.FormattingEnabled = true;
+            this.comboBoxCategory.Location = new System.Drawing.Point(235, 35);
+            this.comboBoxCategory.Name = "comboBoxCategory";
+            this.comboBoxCategory.Size = new System.Drawing.Size(180, 23);
+            this.comboBoxCategory.TabIndex = 3;
             // 
             // lblDate
             // 
@@ -154,14 +165,14 @@
             this.lblDate.TabIndex = 4;
             this.lblDate.Text = "Date:";
             // 
-            // dtpEventDate
+            // dateTimePickerEventDate
             // 
-            this.dtpEventDate.Enabled = false;
-            this.dtpEventDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpEventDate.Location = new System.Drawing.Point(440, 35);
-            this.dtpEventDate.Name = "dtpEventDate";
-            this.dtpEventDate.Size = new System.Drawing.Size(150, 23);
-            this.dtpEventDate.TabIndex = 5;
+            this.dateTimePickerEventDate.Enabled = false;
+            this.dateTimePickerEventDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTimePickerEventDate.Location = new System.Drawing.Point(440, 35);
+            this.dateTimePickerEventDate.Name = "dateTimePickerEventDate";
+            this.dateTimePickerEventDate.Size = new System.Drawing.Size(150, 23);
+            this.dateTimePickerEventDate.TabIndex = 5;
             // 
             // chkUseDate
             // 
@@ -173,9 +184,9 @@
             this.chkUseDate.Text = "Filter by date";
             this.chkUseDate.UseVisualStyleBackColor = true;
             this.chkUseDate.CheckedChanged += new System.EventHandler(this.chkUseDate_CheckedChanged);
-            // 
+
             // btnSearch
-            // 
+
             this.btnSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSearch.ForeColor = System.Drawing.Color.White;
@@ -186,9 +197,9 @@
             this.btnSearch.Text = "🔍 Search";
             this.btnSearch.UseVisualStyleBackColor = false;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            // 
+
             // btnClearFilters
-            // 
+
             this.btnClearFilters.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(76)))), ((int)(((byte)(60)))));
             this.btnClearFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClearFilters.ForeColor = System.Drawing.Color.White;
@@ -199,94 +210,94 @@
             this.btnClearFilters.Text = "Clear Filters";
             this.btnClearFilters.UseVisualStyleBackColor = false;
             this.btnClearFilters.Click += new System.EventHandler(this.btnClearFilters_Click);
-            // 
+
             // panelSort
-            // 
+
             this.panelSort.BackColor = System.Drawing.Color.White;
             this.panelSort.Controls.Add(this.lblSort);
-            this.panelSort.Controls.Add(this.cmbSort);
+            this.panelSort.Controls.Add(this.comboBoxSortOptions);
             this.panelSort.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSort.Location = new System.Drawing.Point(0, 170);
             this.panelSort.Name = "panelSort";
             this.panelSort.Padding = new System.Windows.Forms.Padding(10);
             this.panelSort.Size = new System.Drawing.Size(1200, 50);
             this.panelSort.TabIndex = 2;
-            // 
+
             // lblSort
-            // 
+
             this.lblSort.AutoSize = true;
             this.lblSort.Location = new System.Drawing.Point(15, 17);
             this.lblSort.Name = "lblSort";
             this.lblSort.Size = new System.Drawing.Size(50, 15);
             this.lblSort.TabIndex = 0;
             this.lblSort.Text = "Sort by:";
-            // 
-            // cmbSort
-            // 
-            this.cmbSort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSort.FormattingEnabled = true;
-            this.cmbSort.Location = new System.Drawing.Point(80, 14);
-            this.cmbSort.Name = "cmbSort";
-            this.cmbSort.Size = new System.Drawing.Size(180, 23);
-            this.cmbSort.TabIndex = 1;
-            this.cmbSort.SelectedIndexChanged += new System.EventHandler(this.cmbSort_SelectedIndexChanged);
-            // 
+
+            // comboBoxSortOptions
+
+            this.comboBoxSortOptions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSortOptions.FormattingEnabled = true;
+            this.comboBoxSortOptions.Location = new System.Drawing.Point(80, 14);
+            this.comboBoxSortOptions.Name = "comboBoxSortOptions";
+            this.comboBoxSortOptions.Size = new System.Drawing.Size(180, 23);
+            this.comboBoxSortOptions.TabIndex = 1;
+            this.comboBoxSortOptions.SelectedIndexChanged += new System.EventHandler(this.comboBoxSortOptions_SelectedIndexChanged);
+
             // splitContainer
-            // 
+
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer.Location = new System.Drawing.Point(0, 220);
             this.splitContainer.Name = "splitContainer";
-            // 
+
             // splitContainer.Panel1
-            // 
-            this.splitContainer.Panel1.Controls.Add(this.lstEvents);
-            // 
+
+            this.splitContainer.Panel1.Controls.Add(this.listBoxEvents);
+
             // splitContainer.Panel2
-            // 
+
             this.splitContainer.Panel2.Controls.Add(this.panelDetails);
             this.splitContainer.Panel2.Controls.Add(this.panelRecommendations);
             this.splitContainer.Size = new System.Drawing.Size(1200, 506);
             this.splitContainer.SplitterDistance = 500;
             this.splitContainer.TabIndex = 3;
-            // 
-            // lstEvents
-            // 
-            this.lstEvents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstEvents.FormattingEnabled = true;
-            this.lstEvents.ItemHeight = 15;
-            this.lstEvents.Location = new System.Drawing.Point(0, 0);
-            this.lstEvents.Name = "lstEvents";
-            this.lstEvents.Size = new System.Drawing.Size(500, 506);
-            this.lstEvents.TabIndex = 0;
-            this.lstEvents.SelectedIndexChanged += new System.EventHandler(this.lstEvents_SelectedIndexChanged);
-            // 
+
+            // listBoxEvents
+
+            this.listBoxEvents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxEvents.FormattingEnabled = true;
+            this.listBoxEvents.ItemHeight = 15;
+            this.listBoxEvents.Location = new System.Drawing.Point(0, 0);
+            this.listBoxEvents.Name = "listBoxEvents";
+            this.listBoxEvents.Size = new System.Drawing.Size(500, 506);
+            this.listBoxEvents.TabIndex = 0;
+            this.listBoxEvents.SelectedIndexChanged += new System.EventHandler(this.listBoxEvents_SelectedIndexChanged);
+
             // panelDetails
-            // 
-            this.panelDetails.Controls.Add(this.rtbEventDetails);
+ 
+            this.panelDetails.Controls.Add(this.richTextBoxEventDetails);
             this.panelDetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDetails.Location = new System.Drawing.Point(0, 0);
             this.panelDetails.Name = "panelDetails";
             this.panelDetails.Padding = new System.Windows.Forms.Padding(10);
             this.panelDetails.Size = new System.Drawing.Size(696, 306);
             this.panelDetails.TabIndex = 0;
-            // 
-            // rtbEventDetails
-            // 
-            this.rtbEventDetails.BackColor = System.Drawing.Color.White;
-            this.rtbEventDetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbEventDetails.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.rtbEventDetails.Location = new System.Drawing.Point(10, 10);
-            this.rtbEventDetails.Name = "rtbEventDetails";
-            this.rtbEventDetails.ReadOnly = true;
-            this.rtbEventDetails.Size = new System.Drawing.Size(676, 286);
-            this.rtbEventDetails.TabIndex = 0;
-            this.rtbEventDetails.Text = "Select an event to view details...";
-            // 
+ 
+            // richTextBoxEventDetails
+
+            this.richTextBoxEventDetails.BackColor = System.Drawing.Color.White;
+            this.richTextBoxEventDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxEventDetails.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.richTextBoxEventDetails.Location = new System.Drawing.Point(10, 10);
+            this.richTextBoxEventDetails.Name = "richTextBoxEventDetails";
+            this.richTextBoxEventDetails.ReadOnly = true;
+            this.richTextBoxEventDetails.Size = new System.Drawing.Size(676, 286);
+            this.richTextBoxEventDetails.TabIndex = 0;
+            this.richTextBoxEventDetails.Text = "Select an event to view details...";
+
             // panelRecommendations
-            // 
+
             this.panelRecommendations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
             this.panelRecommendations.Controls.Add(this.lblRecommendations);
-            this.panelRecommendations.Controls.Add(this.lstRecommendations);
+            this.panelRecommendations.Controls.Add(this.listBoxRecommendations);
             this.panelRecommendations.Controls.Add(this.btnViewRecommendation);
             this.panelRecommendations.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelRecommendations.Location = new System.Drawing.Point(0, 306);
@@ -294,9 +305,9 @@
             this.panelRecommendations.Padding = new System.Windows.Forms.Padding(10);
             this.panelRecommendations.Size = new System.Drawing.Size(696, 200);
             this.panelRecommendations.TabIndex = 1;
-            // 
+
             // lblRecommendations
-            // 
+
             this.lblRecommendations.AutoSize = true;
             this.lblRecommendations.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblRecommendations.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(128)))), ((int)(((byte)(185)))));
@@ -305,21 +316,21 @@
             this.lblRecommendations.Size = new System.Drawing.Size(176, 19);
             this.lblRecommendations.TabIndex = 0;
             this.lblRecommendations.Text = "⭐ Recommended Events";
-            // 
-            // lstRecommendations
-            // 
-            this.lstRecommendations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+
+            // listBoxRecommendations
+
+            this.listBoxRecommendations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstRecommendations.FormattingEnabled = true;
-            this.lstRecommendations.ItemHeight = 15;
-            this.lstRecommendations.Location = new System.Drawing.Point(13, 35);
-            this.lstRecommendations.Name = "lstRecommendations";
-            this.lstRecommendations.Size = new System.Drawing.Size(670, 109);
-            this.lstRecommendations.TabIndex = 1;
-            // 
+            this.listBoxRecommendations.FormattingEnabled = true;
+            this.listBoxRecommendations.ItemHeight = 15;
+            this.listBoxRecommendations.Location = new System.Drawing.Point(13, 35);
+            this.listBoxRecommendations.Name = "listBoxRecommendations";
+            this.listBoxRecommendations.Size = new System.Drawing.Size(670, 109);
+            this.listBoxRecommendations.TabIndex = 1;
+
             // btnViewRecommendation
-            // 
+ 
             this.btnViewRecommendation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnViewRecommendation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(89)))), ((int)(((byte)(182)))));
             this.btnViewRecommendation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -331,9 +342,9 @@
             this.btnViewRecommendation.Text = "View Selected";
             this.btnViewRecommendation.UseVisualStyleBackColor = false;
             this.btnViewRecommendation.Click += new System.EventHandler(this.btnViewRecommendation_Click);
-            // 
+
             // statusStrip
-            // 
+
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblStatus});
             this.statusStrip.Location = new System.Drawing.Point(0, 726);
@@ -341,15 +352,15 @@
             this.statusStrip.Size = new System.Drawing.Size(1200, 22);
             this.statusStrip.TabIndex = 4;
             this.statusStrip.Text = "statusStrip1";
-            // 
+
             // lblStatus
-            // 
+
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(39, 17);
             this.lblStatus.Text = "Ready";
-            // 
+
             // EventsForm
-            // 
+
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1200, 748);
@@ -390,22 +401,22 @@
         private System.Windows.Forms.Label lblSearchKeyword;
         private System.Windows.Forms.TextBox txtSearchKeyword;
         private System.Windows.Forms.Label lblCategory;
-        private System.Windows.Forms.ComboBox cmbCategory;
+        private System.Windows.Forms.ComboBox comboBoxCategory;
         private System.Windows.Forms.Label lblDate;
-        private System.Windows.Forms.DateTimePicker dtpEventDate;
+        private System.Windows.Forms.DateTimePicker dateTimePickerEventDate;
         private System.Windows.Forms.CheckBox chkUseDate;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnClearFilters;
         private System.Windows.Forms.Panel panelSort;
         private System.Windows.Forms.Label lblSort;
-        private System.Windows.Forms.ComboBox cmbSort;
+        private System.Windows.Forms.ComboBox comboBoxSortOptions;
         private System.Windows.Forms.SplitContainer splitContainer;
-        private System.Windows.Forms.ListBox lstEvents;
+        private System.Windows.Forms.ListBox listBoxEvents;
         private System.Windows.Forms.Panel panelDetails;
-        private System.Windows.Forms.RichTextBox rtbEventDetails;
+        private System.Windows.Forms.RichTextBox richTextBoxEventDetails;
         private System.Windows.Forms.Panel panelRecommendations;
         private System.Windows.Forms.Label lblRecommendations;
-        private System.Windows.Forms.ListBox lstRecommendations;
+        private System.Windows.Forms.ListBox listBoxRecommendations;
         private System.Windows.Forms.Button btnViewRecommendation;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;

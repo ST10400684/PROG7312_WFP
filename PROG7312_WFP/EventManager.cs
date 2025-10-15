@@ -8,26 +8,14 @@ namespace PROG7312_WFP
 {
     public static class EventManager
     {
-        // Sorted Dictionary for efficient date-based organization
-        private static SortedDictionary<DateTime, List<Event>> eventsByDate = new SortedDictionary<DateTime, List<Event>>();
-
-        // Dictionary for category-based storage
-        private static Dictionary<string, List<Event>> eventsByCategory = new Dictionary<string, List<Event>>();
-
-        // HashSet for unique categories
-        private static HashSet<string> uniqueCategories = new HashSet<string>();
-
-        // Stack for recently viewed events
-        private static Stack<Event> recentlyViewed = new Stack<Event>();
-
-        // Queue for upcoming featured events
-        private static Queue<Event> featuredQueue = new Queue<Event>();
-
-        // User search pattern tracking for recommendations
-        private static Dictionary<string, int> categorySearchCount = new Dictionary<string, int>();
-        private static Dictionary<DateTime, int> dateSearchCount = new Dictionary<DateTime, int>();
-
-        private static int nextEventId = 5001;
+        private static SortedDictionary<DateTime, List<Event>> eventsGroupedByDate = new SortedDictionary<DateTime, List<Event>>();
+        private static Dictionary<string, List<Event>> eventsGroupedByCategory = new Dictionary<string, List<Event>>();
+        private static HashSet<string> allCategories = new HashSet<string>();
+        private static Stack<Event> recentlyViewedEvents = new Stack<Event>();
+        private static Queue<Event> featuredEventsQueue = new Queue<Event>();
+        private static Dictionary<string, int> searchCountByCategory = new Dictionary<string, int>();
+        private static Dictionary<DateTime, int> searchCountByDate = new Dictionary<DateTime, int>();
+        private static int nextAvailableEventId = 5001;
 
         public static void InitializeSampleData()
         {
@@ -36,163 +24,163 @@ namespace PROG7312_WFP
             // Add diverse sample events (20+ entries)
             var events = new List<Event>
             {
-                new Event(nextEventId++, "City Council Meeting", "Government", new DateTime(2025, 10, 15, 18, 0, 0), "Monthly council meeting to discuss municipal matters", "City Hall", "Cape Town Municipality", true),
-                new Event(nextEventId++, "Community Clean-Up Day", "Community", new DateTime(2025, 10, 20, 9, 0, 0), "Join us for a neighborhood clean-up initiative", "Greenpoint Park", "Community Services", true),
-                new Event(nextEventId++, "Water Conservation Workshop", "Education", new DateTime(2025, 10, 22, 14, 0, 0), "Learn about water-saving techniques", "Municipal Library", "Water Department", false),
-                new Event(nextEventId++, "Heritage Day Celebration", "Culture", new DateTime(2025, 10, 24, 10, 0, 0), "Celebrate our diverse heritage with food and music", "Grand Parade", "Cultural Affairs", true),
-                new Event(nextEventId++, "Road Maintenance Notice", "Infrastructure", new DateTime(2025, 10, 18, 6, 0, 0), "Main Road closure for repairs", "Main Road", "Public Works", false),
-                new Event(nextEventId++, "Youth Sports Tournament", "Sports", new DateTime(2025, 10, 28, 8, 0, 0), "Annual youth soccer and netball tournament", "Sports Complex", "Recreation Department", false),
-                new Event(nextEventId++, "Small Business Workshop", "Business", new DateTime(2025, 11, 2, 13, 0, 0), "Support for local entrepreneurs", "Business Hub", "Economic Development", false),
-                new Event(nextEventId++, "Public Safety Forum", "Safety", new DateTime(2025, 11, 5, 19, 0, 0), "Community safety discussion with local police", "Community Center", "Metro Police", true),
-                new Event(nextEventId++, "Environmental Awareness Day", "Environment", new DateTime(2025, 11, 8, 10, 0, 0), "Learn about local environmental initiatives", "Botanical Gardens", "Environmental Services", false),
-                new Event(nextEventId++, "Arts & Crafts Market", "Culture", new DateTime(2025, 11, 12, 9, 0, 0), "Local artisans showcase their work", "Waterfront", "Arts Council", false),
-                new Event(nextEventId++, "Budget Public Hearing", "Government", new DateTime(2025, 11, 15, 18, 30, 0), "Annual budget presentation and public input", "City Hall", "Finance Department", true),
-                new Event(nextEventId++, "Health Screening Day", "Health", new DateTime(2025, 11, 18, 8, 0, 0), "Free health screenings for residents", "Civic Centre", "Health Department", false),
-                new Event(nextEventId++, "Traffic Law Workshop", "Education", new DateTime(2025, 11, 20, 15, 0, 0), "Understanding local traffic regulations", "Training Center", "Metro Police", false),
-                new Event(nextEventId++, "Senior Citizens Tea", "Community", new DateTime(2025, 11, 22, 14, 0, 0), "Social gathering for senior residents", "Senior Center", "Social Services", false),
-                new Event(nextEventId++, "Marathon Event", "Sports", new DateTime(2025, 11, 25, 6, 0, 0), "Annual Cape Town Marathon", "City Center", "Sports Commission", true),
-                new Event(nextEventId++, "Recycling Initiative Launch", "Environment", new DateTime(2025, 11, 28, 11, 0, 0), "New recycling program introduction", "Municipal Offices", "Waste Management", false),
-                new Event(nextEventId++, "Holiday Market", "Business", new DateTime(2025, 12, 5, 9, 0, 0), "Festive shopping market", "Town Square", "Business Association", true),
-                new Event(nextEventId++, "Fire Safety Training", "Safety", new DateTime(2025, 12, 8, 10, 0, 0), "Basic fire safety for residents", "Fire Station", "Fire Department", false),
-                new Event(nextEventId++, "Christmas Carols Concert", "Culture", new DateTime(2025, 12, 15, 18, 0, 0), "Community caroling event", "City Hall Steps", "Cultural Affairs", true),
-                new Event(nextEventId++, "New Year Planning Session", "Government", new DateTime(2025, 12, 20, 16, 0, 0), "2026 municipal planning overview", "Council Chambers", "City Manager", false)
+                new Event(nextAvailableEventId++, "City Council Meeting", "Government", new DateTime(2025, 10, 15, 18, 0, 0), "Monthly council meeting to discuss municipal matters", "City Hall", "Cape Town Municipality", true),
+                new Event(nextAvailableEventId++, "Community Clean-Up Day", "Community", new DateTime(2025, 10, 20, 9, 0, 0), "Join us for a neighborhood clean-up initiative", "Greenpoint Park", "Community Services", true),
+                new Event(nextAvailableEventId++, "Water Conservation Workshop", "Education", new DateTime(2025, 10, 22, 14, 0, 0), "Learn about water-saving techniques", "Municipal Library", "Water Department", false),
+                new Event(nextAvailableEventId++, "Heritage Day Celebration", "Culture", new DateTime(2025, 10, 24, 10, 0, 0), "Celebrate our diverse heritage with food and music", "Grand Parade", "Cultural Affairs", true),
+                new Event(nextAvailableEventId++, "Road Maintenance Notice", "Infrastructure", new DateTime(2025, 10, 18, 6, 0, 0), "Main Road closure for repairs", "Main Road", "Public Works", false),
+                new Event(nextAvailableEventId++, "Youth Sports Tournament", "Sports", new DateTime(2025, 10, 28, 8, 0, 0), "Annual youth soccer and netball tournament", "Sports Complex", "Recreation Department", false),
+                new Event(nextAvailableEventId++, "Small Business Workshop", "Business", new DateTime(2025, 11, 2, 13, 0, 0), "Support for local entrepreneurs", "Business Hub", "Economic Development", false),
+                new Event(nextAvailableEventId++, "Public Safety Forum", "Safety", new DateTime(2025, 11, 5, 19, 0, 0), "Community safety discussion with local police", "Community Center", "Metro Police", true),
+                new Event(nextAvailableEventId++, "Environmental Awareness Day", "Environment", new DateTime(2025, 11, 8, 10, 0, 0), "Learn about local environmental initiatives", "Botanical Gardens", "Environmental Services", false),
+                new Event(nextAvailableEventId++, "Arts & Crafts Market", "Culture", new DateTime(2025, 11, 12, 9, 0, 0), "Local artisans showcase their work", "Waterfront", "Arts Council", false),
+                new Event(nextAvailableEventId++, "Budget Public Hearing", "Government", new DateTime(2025, 11, 15, 18, 30, 0), "Annual budget presentation and public input", "City Hall", "Finance Department", true),
+                new Event(nextAvailableEventId++, "Health Screening Day", "Health", new DateTime(2025, 11, 18, 8, 0, 0), "Free health screenings for residents", "Civic Centre", "Health Department", false),
+                new Event(nextAvailableEventId++, "Traffic Law Workshop", "Education", new DateTime(2025, 11, 20, 15, 0, 0), "Understanding local traffic regulations", "Training Center", "Metro Police", false),
+                new Event(nextAvailableEventId++, "Senior Citizens Tea", "Community", new DateTime(2025, 11, 22, 14, 0, 0), "Social gathering for senior residents", "Senior Center", "Social Services", false),
+                new Event(nextAvailableEventId++, "Marathon Event", "Sports", new DateTime(2025, 11, 25, 6, 0, 0), "Annual Cape Town Marathon", "City Center", "Sports Commission", true),
+                new Event(nextAvailableEventId++, "Recycling Initiative Launch", "Environment", new DateTime(2025, 11, 28, 11, 0, 0), "New recycling program introduction", "Municipal Offices", "Waste Management", false),
+                new Event(nextAvailableEventId++, "Holiday Market", "Business", new DateTime(2025, 12, 5, 9, 0, 0), "Festive shopping market", "Town Square", "Business Association", true),
+                new Event(nextAvailableEventId++, "Fire Safety Training", "Safety", new DateTime(2025, 12, 8, 10, 0, 0), "Basic fire safety for residents", "Fire Station", "Fire Department", false),
+                new Event(nextAvailableEventId++, "Christmas Carols Concert", "Culture", new DateTime(2025, 12, 15, 18, 0, 0), "Community caroling event", "City Hall Steps", "Cultural Affairs", true),
+                new Event(nextAvailableEventId++, "New Year Planning Session", "Government", new DateTime(2025, 12, 20, 16, 0, 0), "2026 municipal planning overview", "Council Chambers", "City Manager", false)
             };
 
-            foreach (var evt in events)
+            foreach (var currentEvent in events)
             {
-                AddEvent(evt);
+                AddEvent(currentEvent);
             }
         }
 
-        public static void AddEvent(Event evt)
+        public static void AddEvent(Event eventToAdd)
         {
-            if (evt == null) return;
+            if (eventToAdd == null) return;
 
             // Check if event already exists (prevent duplicates)
             var existingEvents = GetAllEvents();
-            if (existingEvents.Any(e => e.EventId == evt.EventId))
+            if (existingEvents.Any(existingEvent => existingEvent.EventId == eventToAdd.EventId))
             {
                 return; // Event already exists, skip adding
             }
 
             // Add to sorted dictionary by date
-            DateTime dateKey = evt.EventDate.Date;
-            if (!eventsByDate.ContainsKey(dateKey))
+            DateTime dateKey = eventToAdd.EventDate.Date;
+            if (!eventsGroupedByDate.ContainsKey(dateKey))
             {
-                eventsByDate[dateKey] = new List<Event>();
+                eventsGroupedByDate[dateKey] = new List<Event>();
             }
-            eventsByDate[dateKey].Add(evt);
+            eventsGroupedByDate[dateKey].Add(eventToAdd);
 
             // Add to category dictionary
-            if (!eventsByCategory.ContainsKey(evt.Category))
+            if (!eventsGroupedByCategory.ContainsKey(eventToAdd.Category))
             {
-                eventsByCategory[evt.Category] = new List<Event>();
+                eventsGroupedByCategory[eventToAdd.Category] = new List<Event>();
             }
-            eventsByCategory[evt.Category].Add(evt);
+            eventsGroupedByCategory[eventToAdd.Category].Add(eventToAdd);
 
             // Add to unique categories set
-            uniqueCategories.Add(evt.Category);
+            allCategories.Add(eventToAdd.Category);
 
             // Add featured events to queue
-            if (evt.IsFeatured && evt.EventDate >= DateTime.Now)
+            if (eventToAdd.IsFeatured && eventToAdd.EventDate >= DateTime.Now)
             {
-                featuredQueue.Enqueue(evt);
+                featuredEventsQueue.Enqueue(eventToAdd);
             }
         }
 
-        public static void TrackEventView(Event evt)
+        public static void RecordEventView(Event viewedEvent)
         {
-            if (evt != null && (recentlyViewed.Count == 0 || recentlyViewed.Peek().EventId != evt.EventId))
+            if (viewedEvent != null && (recentlyViewedEvents.Count == 0 || recentlyViewedEvents.Peek().EventId != viewedEvent.EventId))
             {
-                recentlyViewed.Push(evt);
-                if (recentlyViewed.Count > 10)
+                recentlyViewedEvents.Push(viewedEvent);
+                if (recentlyViewedEvents.Count > 10)
                 {
-                    var temp = recentlyViewed.ToList();
-                    temp.RemoveAt(temp.Count - 1);
-                    recentlyViewed = new Stack<Event>(temp.Reverse<Event>());
+                    var tempList = recentlyViewedEvents.ToList();
+                    tempList.RemoveAt(tempList.Count - 1);
+                    recentlyViewedEvents = new Stack<Event>(tempList.Reverse<Event>());
                 }
             }
         }
 
-        public static void TrackSearch(string category = null, DateTime? date = null)
+        public static void RecordSearchActivity(string category = null, DateTime? date = null)
         {
             if (!string.IsNullOrEmpty(category))
             {
-                if (categorySearchCount.ContainsKey(category))
-                    categorySearchCount[category]++;
+                if (searchCountByCategory.ContainsKey(category))
+                    searchCountByCategory[category]++;
                 else
-                    categorySearchCount[category] = 1;
+                    searchCountByCategory[category] = 1;
             }
 
             if (date.HasValue)
             {
                 DateTime dateKey = date.Value.Date;
-                if (dateSearchCount.ContainsKey(dateKey))
-                    dateSearchCount[dateKey]++;
+                if (searchCountByDate.ContainsKey(dateKey))
+                    searchCountByDate[dateKey]++;
                 else
-                    dateSearchCount[dateKey] = 1;
+                    searchCountByDate[dateKey] = 1;
             }
         }
 
         public static List<Event> GetAllEvents()
         {
-            return eventsByDate.Values.SelectMany(list => list).ToList();
+            return eventsGroupedByDate.Values.SelectMany(eventList => eventList).ToList();
         }
 
         public static List<Event> SearchEvents(string category = null, DateTime? date = null, string searchText = null)
         {
-            TrackSearch(category, date);
+            RecordSearchActivity(category, date);
 
-            var results = GetAllEvents();
+            var searchResults = GetAllEvents();
 
             if (!string.IsNullOrEmpty(category) && category != "All Categories")
             {
-                results = results.Where(e => e.Category.Equals(category, StringComparison.OrdinalIgnoreCase)).ToList();
+                searchResults = searchResults.Where(currentEvent => currentEvent.Category.Equals(category, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (date.HasValue)
             {
-                results = results.Where(e => e.EventDate.Date == date.Value.Date).ToList();
+                searchResults = searchResults.Where(currentEvent => currentEvent.EventDate.Date == date.Value.Date).ToList();
             }
 
             if (!string.IsNullOrEmpty(searchText))
             {
                 searchText = searchText.ToLower();
-                results = results.Where(e =>
-                    e.Title.ToLower().Contains(searchText) ||
-                    e.Description.ToLower().Contains(searchText) ||
-                    e.Location.ToLower().Contains(searchText)).ToList();
+                searchResults = searchResults.Where(currentEvent =>
+                    currentEvent.Title.ToLower().Contains(searchText) ||
+                    currentEvent.Description.ToLower().Contains(searchText) ||
+                    currentEvent.Location.ToLower().Contains(searchText)).ToList();
             }
 
-            return results;
+            return searchResults;
         }
 
-        public static List<Event> SortEvents(List<Event> events, string sortBy)
+        public static List<Event> SortEvents(List<Event> eventsToSort, string sortBy)
         {
             return sortBy switch
             {
-                "Date (Ascending)" => events.OrderBy(e => e.EventDate).ToList(),
-                "Date (Descending)" => events.OrderByDescending(e => e.EventDate).ToList(),
-                "Title (A-Z)" => events.OrderBy(e => e.Title).ToList(),
-                "Title (Z-A)" => events.OrderByDescending(e => e.Title).ToList(),
-                "Category" => events.OrderBy(e => e.Category).ThenBy(e => e.EventDate).ToList(),
-                _ => events
+                "Date (Ascending)" => eventsToSort.OrderBy(currentEvent => currentEvent.EventDate).ToList(),
+                "Date (Descending)" => eventsToSort.OrderByDescending(currentEvent => currentEvent.EventDate).ToList(),
+                "Title (A-Z)" => eventsToSort.OrderBy(currentEvent => currentEvent.Title).ToList(),
+                "Title (Z-A)" => eventsToSort.OrderByDescending(currentEvent => currentEvent.Title).ToList(),
+                "Category" => eventsToSort.OrderBy(currentEvent => currentEvent.Category).ThenBy(currentEvent => currentEvent.EventDate).ToList(),
+                _ => eventsToSort
             };
         }
 
         public static HashSet<string> GetAllCategories()
         {
-            return new HashSet<string>(uniqueCategories);
+            return new HashSet<string>(allCategories);
         }
 
         public static List<Event> GetRecentlyViewed()
         {
-            return recentlyViewed.ToList();
+            return recentlyViewedEvents.ToList();
         }
 
         public static List<Event> GetFeaturedEvents()
         {
-            return featuredQueue.ToList();
+            return featuredEventsQueue.ToList();
         }
 
         public static List<Event> GetRecommendedEvents()
@@ -201,22 +189,22 @@ namespace PROG7312_WFP
             var allEvents = GetAllEvents();
 
             // Get top 3 searched categories
-            var topCategories = categorySearchCount
-                .OrderByDescending(kvp => kvp.Value)
+            var topSearchedCategories = searchCountByCategory
+                .OrderByDescending(categoryGroup => categoryGroup.Value)
                 .Take(3)
-                .Select(kvp => kvp.Key)
+                .Select(categoryGroup => categoryGroup.Key)
                 .ToList();
 
             // Get events from top categories not in recently viewed
-            var recentIds = new HashSet<int>(recentlyViewed.Select(e => e.EventId));
+            var recentlyViewedIds = new HashSet<int>(recentlyViewedEvents.Select(currentEvent => currentEvent.EventId));
 
-            foreach (var category in topCategories)
+            foreach (var category in topSearchedCategories)
             {
                 var categoryEvents = allEvents
-                    .Where(e => e.Category == category &&
-                                !recentIds.Contains(e.EventId) &&
-                                e.EventDate >= DateTime.Now)
-                    .OrderBy(e => e.EventDate)
+                    .Where(currentEvent => currentEvent.Category == category &&
+                                !recentlyViewedIds.Contains(currentEvent.EventId) &&
+                                currentEvent.EventDate >= DateTime.Now)
+                    .OrderBy(currentEvent => currentEvent.EventDate)
                     .Take(2);
 
                 recommendations.AddRange(categoryEvents);
@@ -226,8 +214,8 @@ namespace PROG7312_WFP
             if (recommendations.Count == 0)
             {
                 recommendations = allEvents
-                    .Where(e => e.IsFeatured && e.EventDate >= DateTime.Now)
-                    .OrderBy(e => e.EventDate)
+                    .Where(currentEvent => currentEvent.IsFeatured && currentEvent.EventDate >= DateTime.Now)
+                    .OrderBy(currentEvent => currentEvent.EventDate)
                     .Take(5)
                     .ToList();
             }
@@ -237,7 +225,7 @@ namespace PROG7312_WFP
 
         public static Dictionary<string, int> GetCategoryStatistics()
         {
-            return eventsByCategory.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Count);
+            return eventsGroupedByCategory.ToDictionary(categoryGroup => categoryGroup.Key, categoryGroup => categoryGroup.Value.Count);
         }
 
         public static int GetTotalEventCount()
@@ -247,14 +235,14 @@ namespace PROG7312_WFP
 
         public static void ClearAllData()
         {
-            eventsByDate.Clear();
-            eventsByCategory.Clear();
-            uniqueCategories.Clear();
-            recentlyViewed.Clear();
-            featuredQueue.Clear();
-            categorySearchCount.Clear();
-            dateSearchCount.Clear();
-            nextEventId = 5001;
+            eventsGroupedByDate.Clear();
+            eventsGroupedByCategory.Clear();
+            allCategories.Clear();
+            recentlyViewedEvents.Clear();
+            featuredEventsQueue.Clear();
+            searchCountByCategory.Clear();
+            searchCountByDate.Clear();
+            nextAvailableEventId = 5001;
         }
     }
 }

@@ -25,39 +25,39 @@
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
-            // 
+
             // menuStrip1
-            // 
+
             menuStrip1.Items.AddRange(new ToolStripItem[] { reportIssuesToolStripMenuItem, localEventsToolStripMenuItem, serviceStatusToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(800, 24);
             menuStrip1.TabIndex = 3;
             menuStrip1.Text = "menuStrip1";
-            // 
+
             // reportIssuesToolStripMenuItem
-            // 
+
             reportIssuesToolStripMenuItem.Name = "reportIssuesToolStripMenuItem";
             reportIssuesToolStripMenuItem.Size = new Size(88, 20);
             reportIssuesToolStripMenuItem.Text = "Report Issues";
-            reportIssuesToolStripMenuItem.Click += knoppie1ToolStripMenuItem_Click;
-            // 
+            reportIssuesToolStripMenuItem.Click += reportIssuesMenuItem_Click;
+
             // localEventsToolStripMenuItem
-            // 
+
             localEventsToolStripMenuItem.Name = "localEventsToolStripMenuItem";
             localEventsToolStripMenuItem.Size = new Size(198, 20);
             localEventsToolStripMenuItem.Text = "Local Events and Announcements";
-            localEventsToolStripMenuItem.Click += toolStripMenuItem1_Click;
-            // 
+            localEventsToolStripMenuItem.Click += localEventsMenuItem_Click;
+
             // serviceStatusToolStripMenuItem
-            // 
+
             serviceStatusToolStripMenuItem.Name = "serviceStatusToolStripMenuItem";
             serviceStatusToolStripMenuItem.Size = new Size(136, 20);
             serviceStatusToolStripMenuItem.Text = "Service Request Status";
-            serviceStatusToolStripMenuItem.Click += toolStripMenuItem2_Click;
-            // 
+            serviceStatusToolStripMenuItem.Click += serviceStatusMenuItem_Click;
+
             // pictureBox1
-            // 
+
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Image = Properties.Resources.images;
             pictureBox1.Location = new Point(0, 24);
@@ -67,9 +67,9 @@
             pictureBox1.TabIndex = 4;
             pictureBox1.TabStop = false;
             pictureBox1.Click += pictureBox1_Click_1;
-            // 
+
             // Form1
-            // 
+
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);

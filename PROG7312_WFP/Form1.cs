@@ -15,19 +15,19 @@ namespace PROG7312_WFP
             // Form load logic
         }
 
-        private void knoppie1ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void reportIssuesMenuItem_Click(object sender, EventArgs e)
         {
             // Report Issues menu item
-            ShowReportForm();
+            ShowReportIssuesForm();
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void localEventsMenuItem_Click(object sender, EventArgs e)
         {
             // Local Events and Announcements menu item
-            ShowEventsForm();
+            ShowLocalEventsForm();
         }
 
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        private void serviceStatusMenuItem_Click(object sender, EventArgs e)
         {
             // Service Request Status menu item (To be implemented in Part 3)
             MessageBox.Show("Service Request Status feature will be implemented in Part 3.",
@@ -36,17 +36,17 @@ namespace PROG7312_WFP
                 MessageBoxIcon.Information);
         }
 
-        private void ShowReportForm()
+        private void ShowReportIssuesForm()
         {
-            ReportForm reportForm = new ReportForm();
-            reportForm.Show();
+            ReportForm reportIssuesForm = new ReportForm();
+            reportIssuesForm.Show();
             this.Hide();
         }
 
-        private void ShowEventsForm()
+        private void ShowLocalEventsForm()
         {
-            EventsForm eventsForm = new EventsForm();
-            eventsForm.Show();
+            EventsForm localEventsForm = new EventsForm();
+            localEventsForm.Show();
             this.Hide();
         }
 

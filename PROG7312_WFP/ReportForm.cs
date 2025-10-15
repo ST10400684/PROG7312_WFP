@@ -13,18 +13,18 @@ namespace PROG7312_WFP
 {
     public partial class ReportForm : Form
     {
-        private string attachedFilePath = string.Empty;
-        private ProgressBar progressBar;
-        private Label engagementLabel;
-        private System.Windows.Forms.Timer encouragementTimer;
-        private string[] encouragementMessages = {
+        private string selectedFilePath = string.Empty;
+        private ProgressBar formCompletionProgressBar;
+        private Label motivationalMessageLabel;
+        private System.Windows.Forms.Timer motivationalMessageTimer;
+        private string[] motivationalMessages = {
             "Thank you for helping improve our community! 🌟",
             "Your voice matters - keep reporting! 💪",
             "Together we make our city better! 🏙️",
             "Every report helps us serve you better! ⭐",
             "You're making a difference! 🎯"
         };
-        private int messageIndex = 0;
+        private int currentMessageIndex = 0;
 
         public ReportForm()
         {
@@ -39,44 +39,44 @@ namespace PROG7312_WFP
 
         private void InitializeCategories()
         {
-            cmbCategory.Items.Clear();
-            cmbCategory.Items.Add("Sanitation");
-            cmbCategory.Items.Add("Roads");
-            cmbCategory.Items.Add("Utilities");
-            cmbCategory.Items.Add("Parks & Recreation");
-            cmbCategory.Items.Add("Street Lighting");
-            cmbCategory.Items.Add("General");
+            comboBoxCategory.Items.Clear();
+            comboBoxCategory.Items.Add("Sanitation");
+            comboBoxCategory.Items.Add("Roads");
+            comboBoxCategory.Items.Add("Utilities");
+            comboBoxCategory.Items.Add("Parks & Recreation");
+            comboBoxCategory.Items.Add("Street Lighting");
+            comboBoxCategory.Items.Add("General");
         }
 
         private void InitializeEngagementFeatures()
         {
             // Create and configure progress bar
-            progressBar = new ProgressBar();
-            progressBar.Location = new Point(240, 320);
-            progressBar.Size = new Size(200, 23);
-            progressBar.Minimum = 0;
-            progressBar.Maximum = 100;
-            progressBar.Value = 0;
-            progressBar.Style = ProgressBarStyle.Continuous;
-            this.Controls.Add(progressBar);
+            formCompletionProgressBar = new ProgressBar();
+            formCompletionProgressBar.Location = new Point(240, 320);
+            formCompletionProgressBar.Size = new Size(200, 23);
+            formCompletionProgressBar.Minimum = 0;
+            formCompletionProgressBar.Maximum = 100;
+            formCompletionProgressBar.Value = 0;
+            formCompletionProgressBar.Style = ProgressBarStyle.Continuous;
+            this.Controls.Add(formCompletionProgressBar);
 
             // Create engagement label
-            engagementLabel = new Label();
-            engagementLabel.Location = new Point(150, 350);
-            engagementLabel.Size = new Size(400, 20);
-            engagementLabel.Text = "Fill out the form to report your issue!";
-            engagementLabel.ForeColor = Color.DarkBlue;
-            engagementLabel.Font = new Font("Segoe UI", 9, FontStyle.Italic);
-            this.Controls.Add(engagementLabel);
+            motivationalMessageLabel = new Label();
+            motivationalMessageLabel.Location = new Point(150, 350);
+            motivationalMessageLabel.Size = new Size(400, 20);
+            motivationalMessageLabel.Text = "Fill out the form to report your issue!";
+            motivationalMessageLabel.ForeColor = Color.DarkBlue;
+            motivationalMessageLabel.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            this.Controls.Add(motivationalMessageLabel);
 
             // Setup timer for rotating encouragement messages
-            encouragementTimer = new System.Windows.Forms.Timer();
-            encouragementTimer.Interval = 3000; // 3 seconds
-            encouragementTimer.Tick += EncouragementTimer_Tick;
-            encouragementTimer.Start();
+            motivationalMessageTimer = new System.Windows.Forms.Timer();
+            motivationalMessageTimer.Interval = 3000; // 3 seconds
+            motivationalMessageTimer.Tick += RotateMotivationalMessage;
+            motivationalMessageTimer.Start();
 
             // Update progress when form loads
-            UpdateProgress();
+            UpdateFormCompletionProgress();
         }
 
         private void SetupFormStyling()
@@ -110,53 +110,53 @@ namespace PROG7312_WFP
             btnUpload.ForeColor = Color.White;
         }
 
-        private void EncouragementTimer_Tick(object sender, EventArgs e)
+        private void RotateMotivationalMessage(object sender, EventArgs e)
         {
-            engagementLabel.Text = encouragementMessages[messageIndex];
-            messageIndex = (messageIndex + 1) % encouragementMessages.Length;
+            motivationalMessageLabel.Text = motivationalMessages[currentMessageIndex];
+            currentMessageIndex = (currentMessageIndex + 1) % motivationalMessages.Length;
         }
 
-        private void UpdateProgress()
+        private void UpdateFormCompletionProgress()
         {
-            int progress = 0;
+            int completionProgress = 0;
 
             if (!string.IsNullOrWhiteSpace(txtLocation.Text))
-                progress += 25;
+                completionProgress += 25;
 
-            if (cmbCategory.SelectedItem != null)
-                progress += 25;
+            if (comboBoxCategory.SelectedItem != null)
+                completionProgress += 25;
 
             if (!string.IsNullOrWhiteSpace(rtbDescription.Text))
-                progress += 25;
+                completionProgress += 25;
 
-            if (!string.IsNullOrEmpty(attachedFilePath))
-                progress += 25;
+            if (!string.IsNullOrEmpty(selectedFilePath))
+                completionProgress += 25;
 
-            progressBar.Value = progress;
+            formCompletionProgressBar.Value = completionProgress;
 
             // Update engagement message based on progress
-            if (progress == 0)
-                engagementLabel.Text = "Let's get started! Please fill in your issue details.";
-            else if (progress < 50)
-                engagementLabel.Text = "Great start! Keep going... 📝";
-            else if (progress < 100)
-                engagementLabel.Text = "Almost there! You're doing great! 🎯";
+            if (completionProgress == 0)
+                motivationalMessageLabel.Text = "Let's get started! Please fill in your issue details.";
+            else if (completionProgress < 50)
+                motivationalMessageLabel.Text = "Great start! Keep going... 📝";
+            else if (completionProgress < 100)
+                motivationalMessageLabel.Text = "Almost there! You're doing great! 🎯";
             else
-                engagementLabel.Text = "Perfect! All fields completed. Ready to submit! ✅";
+                motivationalMessageLabel.Text = "Perfect! All fields completed. Ready to submit! ✅";
         }
 
         private void btnUpload_Click(object sender, EventArgs e)
         {
-            ofdAttachment.Title = "Select an image or document";
-            ofdAttachment.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp|Document Files|*.pdf;*.doc;*.docx;*.txt|All Files|*.*";
+            fileAttachmentDialog.Title = "Select an image or document";
+            fileAttachmentDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp|Document Files|*.pdf;*.doc;*.docx;*.txt|All Files|*.*";
 
-            if (ofdAttachment.ShowDialog() == DialogResult.OK)
+            if (fileAttachmentDialog.ShowDialog() == DialogResult.OK)
             {
-                attachedFilePath = ofdAttachment.FileName;
+                selectedFilePath = fileAttachmentDialog.FileName;
                 btnUpload.Text = "✓ File Attached";
                 btnUpload.BackColor = Color.ForestGreen;
-                UpdateProgress();
-                MessageBox.Show($"File attached successfully: {Path.GetFileName(attachedFilePath)}",
+                UpdateFormCompletionProgress();
+                MessageBox.Show($"File attached successfully: {Path.GetFileName(selectedFilePath)}",
                     "Attachment Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -165,7 +165,7 @@ namespace PROG7312_WFP
         {
             // Validate required fields
             if (string.IsNullOrWhiteSpace(txtLocation.Text) ||
-                cmbCategory.SelectedItem == null ||
+                comboBoxCategory.SelectedItem == null ||
                 string.IsNullOrWhiteSpace(rtbDescription.Text))
             {
                 MessageBox.Show("Please complete all required fields before submitting.\n\n" +
@@ -175,73 +175,73 @@ namespace PROG7312_WFP
             }
 
             // Create new issue object
-            Issue newIssue = new Issue(
+            Issue newIssueReport = new Issue(
                 txtLocation.Text.Trim(),
-                cmbCategory.SelectedItem.ToString(),
+                comboBoxCategory.SelectedItem.ToString(),
                 rtbDescription.Text.Trim(),
-                attachedFilePath
+                selectedFilePath
             );
 
             // Add to issue manager
-            IssueManager.AddIssue(newIssue);
+            IssueManager.AddIssue(newIssueReport);
 
             // Create detailed report summary
             string reportSummary = $"🎉 Issue Successfully Submitted!\n\n" +
-                                   $"Issue ID: #{newIssue.IssueId}\n" +
-                                   $"Location: {newIssue.Location}\n" +
-                                   $"Category: {newIssue.Category}\n" +
-                                   $"Description: {newIssue.Description}\n" +
-                                   $"Date Submitted: {newIssue.DateReported:yyyy-MM-dd HH:mm}\n" +
-                                   $"Status: {newIssue.Status}\n" +
-                                   $"Attachment: {(string.IsNullOrEmpty(attachedFilePath) ? "None" : Path.GetFileName(attachedFilePath))}\n\n" +
+                                   $"Issue ID: #{newIssueReport.IssueId}\n" +
+                                   $"Location: {newIssueReport.Location}\n" +
+                                   $"Category: {newIssueReport.Category}\n" +
+                                   $"Description: {newIssueReport.Description}\n" +
+                                   $"Date Submitted: {newIssueReport.DateReported:yyyy-MM-dd HH:mm}\n" +
+                                   $"Status: {newIssueReport.Status}\n" +
+                                   $"Attachment: {(string.IsNullOrEmpty(selectedFilePath) ? "None" : Path.GetFileName(selectedFilePath))}\n\n" +
                                    $"Total Issues Reported: {IssueManager.GetTotalIssueCount()}\n\n" +
                                    $"Thank you for helping improve our community! 🌟";
 
             MessageBox.Show(reportSummary, "Report Submitted Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             // Reset the form for next entry
-            ResetForm();
+            ResetFormFields();
         }
 
-        private void ResetForm()
+        private void ResetFormFields()
         {
             txtLocation.Clear();
             rtbDescription.Clear();
-            cmbCategory.SelectedIndex = -1;
-            attachedFilePath = string.Empty;
+            comboBoxCategory.SelectedIndex = -1;
+            selectedFilePath = string.Empty;
             btnUpload.Text = "Upload File";
             btnUpload.BackColor = Color.CornflowerBlue;
-            UpdateProgress();
+            UpdateFormCompletionProgress();
         }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            Form1 mainForm = new Form1();
-            mainForm.Show();
+            Form1 mainMenuForm = new Form1();
+            mainMenuForm.Show();
             this.Close();
         }
 
         // Event handler to clean up timer when form is closing
         private void ReportForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            encouragementTimer?.Stop();
-            encouragementTimer?.Dispose();
+            motivationalMessageTimer?.Stop();
+            motivationalMessageTimer?.Dispose();
         }
 
         // Event handlers to update progress as user types/selects
         private void txtLocation_TextChanged(object sender, EventArgs e)
         {
-            UpdateProgress();
+            UpdateFormCompletionProgress();
         }
 
-        private void cmbCategory_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UpdateProgress();
+            UpdateFormCompletionProgress();
         }
 
         private void rtbDescription_TextChanged(object sender, EventArgs e)
         {
-            UpdateProgress();
+            UpdateFormCompletionProgress();
         }
 
         // Empty event handlers for designer compatibility

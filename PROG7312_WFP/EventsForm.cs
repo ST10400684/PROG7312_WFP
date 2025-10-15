@@ -70,22 +70,22 @@ namespace PROG7312_WFP
 
         private void LoadCategories()
         {
-            cmbCategory.Items.Clear();
-            cmbCategory.Items.Add("All Categories");
+            comboBoxCategory.Items.Clear();
+            comboBoxCategory.Items.Add("All Categories");
 
             var categories = EventManager.GetAllCategories().OrderBy(c => c);
             foreach (var category in categories)
             {
-                cmbCategory.Items.Add(category);
+                comboBoxCategory.Items.Add(category);
             }
 
-            cmbCategory.SelectedIndex = 0;
+            comboBoxCategory.SelectedIndex = 0;
         }
 
         private void LoadSortOptions()
         {
-            cmbSort.Items.Clear();
-            cmbSort.Items.AddRange(new string[]
+            comboBoxSortOptions.Items.Clear();
+            comboBoxSortOptions.Items.AddRange(new string[]
             {
                 "Date (Ascending)",
                 "Date (Descending)",
@@ -93,7 +93,7 @@ namespace PROG7312_WFP
                 "Title (Z-A)",
                 "Category"
             });
-            cmbSort.SelectedIndex = 0;
+            comboBoxSortOptions.SelectedIndex = 0;
         }
 
         private void LoadEvents(List<Event> events = null)
@@ -105,10 +105,10 @@ namespace PROG7312_WFP
 
             currentEvents = EventManager.SortEvents(events, currentSortMethod);
 
-            lstEvents.Items.Clear();
+            listBoxEvents.Items.Clear();
             foreach (var evt in currentEvents)
             {
-                lstEvents.Items.Add(evt);
+                listBoxEvents.Items.Add(evt);
             }
 
             UpdateStatusBar();
@@ -116,31 +116,31 @@ namespace PROG7312_WFP
 
         private void LoadRecommendations()
         {
-            lstRecommendations.Items.Clear();
+            listBoxRecommendations.Items.Clear();
             var recommendations = EventManager.GetRecommendedEvents();
 
             if (recommendations.Count == 0)
             {
-                lstRecommendations.Items.Add("Search for events to get personalized recommendations!");
+                listBoxRecommendations.Items.Add("Search for events to get personalized recommendations!");
             }
             else
             {
                 foreach (var evt in recommendations)
                 {
-                    lstRecommendations.Items.Add(evt);
+                    listBoxRecommendations.Items.Add(evt);
                 }
             }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            string category = cmbCategory.SelectedItem?.ToString();
+            string category = comboBoxCategory.SelectedItem?.ToString();
             if (category == "All Categories") category = null;
 
             DateTime? date = null;
             if (chkUseDate.Checked)
             {
-                date = dtpEventDate.Value.Date;
+                date = dateTimePickerEventDate.Value.Date;
             }
 
             string searchText = txtSearchKeyword.Text.Trim();
@@ -158,89 +158,89 @@ namespace PROG7312_WFP
         private void btnClearFilters_Click(object sender, EventArgs e)
         {
             txtSearchKeyword.Clear();
-            cmbCategory.SelectedIndex = 0;
+            comboBoxCategory.SelectedIndex = 0;
             chkUseDate.Checked = false;
-            dtpEventDate.Value = DateTime.Now;
+            dateTimePickerEventDate.Value = DateTime.Now;
 
             LoadEvents();
             lblStatus.Text = "Filters cleared. Showing all events.";
         }
 
-        private void cmbSort_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxSortOptions_SelectedIndexChanged(object sender, EventArgs e)
         {
-            currentSortMethod = cmbSort.SelectedItem?.ToString() ?? "Date (Ascending)";
+            currentSortMethod = comboBoxSortOptions.SelectedItem?.ToString() ?? "Date (Ascending)";
             LoadEvents(currentEvents);
         }
 
-        private void lstEvents_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBoxEvents_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lstEvents.SelectedItem is Event selectedEvent)
+            if (listBoxEvents.SelectedItem is Event selectedEvent)
             {
                 DisplayEventDetails(selectedEvent);
-                EventManager.TrackEventView(selectedEvent);
+                EventManager.RecordEventView(selectedEvent);
             }
         }
 
         private void DisplayEventDetails(Event evt)
         {
-            rtbEventDetails.Clear();
+            richTextBoxEventDetails.Clear();
 
             // Title
-            rtbEventDetails.SelectionFont = new Font("Segoe UI", 14, FontStyle.Bold);
-            rtbEventDetails.SelectionColor = Color.FromArgb(41, 128, 185);
-            rtbEventDetails.AppendText(evt.Title + "\n\n");
+            richTextBoxEventDetails.SelectionFont = new Font("Segoe UI", 14, FontStyle.Bold);
+            richTextBoxEventDetails.SelectionColor = Color.FromArgb(41, 128, 185);
+            richTextBoxEventDetails.AppendText(evt.Title + "\n\n");
 
             // Category badge
-            rtbEventDetails.SelectionFont = new Font("Segoe UI", 9, FontStyle.Bold);
-            rtbEventDetails.SelectionColor = Color.White;
-            rtbEventDetails.SelectionBackColor = GetCategoryColor(evt.Category);
-            rtbEventDetails.AppendText($" {evt.Category} ");
-            rtbEventDetails.SelectionBackColor = Color.White;
+            richTextBoxEventDetails.SelectionFont = new Font("Segoe UI", 9, FontStyle.Bold);
+            richTextBoxEventDetails.SelectionColor = Color.White;
+            richTextBoxEventDetails.SelectionBackColor = GetCategoryColor(evt.Category);
+            richTextBoxEventDetails.AppendText($" {evt.Category} ");
+            richTextBoxEventDetails.SelectionBackColor = Color.White;
 
             if (evt.IsFeatured)
             {
-                rtbEventDetails.SelectionBackColor = Color.Gold;
-                rtbEventDetails.SelectionColor = Color.Black;
-                rtbEventDetails.AppendText(" ⭐ FEATURED ");
-                rtbEventDetails.SelectionBackColor = Color.White;
+                richTextBoxEventDetails.SelectionBackColor = Color.Gold;
+                richTextBoxEventDetails.SelectionColor = Color.Black;
+                richTextBoxEventDetails.AppendText(" ⭐ FEATURED ");
+                richTextBoxEventDetails.SelectionBackColor = Color.White;
             }
 
-            rtbEventDetails.AppendText("\n\n");
+            richTextBoxEventDetails.AppendText("\n\n");
 
             // Date and Time
-            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
-            rtbEventDetails.SelectionColor = Color.Black;
-            rtbEventDetails.AppendText("📅 Date & Time:\n");
-            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
-            rtbEventDetails.SelectionColor = Color.DimGray;
-            rtbEventDetails.AppendText($"{evt.EventDate:dddd, MMMM dd, yyyy 'at' hh:mm tt}\n\n");
+            richTextBoxEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            richTextBoxEventDetails.SelectionColor = Color.Black;
+            richTextBoxEventDetails.AppendText("📅 Date & Time:\n");
+            richTextBoxEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
+            richTextBoxEventDetails.SelectionColor = Color.DimGray;
+            richTextBoxEventDetails.AppendText($"{evt.EventDate:dddd, MMMM dd, yyyy 'at' hh:mm tt}\n\n");
 
             // Location
-            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
-            rtbEventDetails.SelectionColor = Color.Black;
-            rtbEventDetails.AppendText("📍 Location:\n");
-            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
-            rtbEventDetails.SelectionColor = Color.DimGray;
-            rtbEventDetails.AppendText($"{evt.Location}\n\n");
+            richTextBoxEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            richTextBoxEventDetails.SelectionColor = Color.Black;
+            richTextBoxEventDetails.AppendText("📍 Location:\n");
+            richTextBoxEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
+            richTextBoxEventDetails.SelectionColor = Color.DimGray;
+            richTextBoxEventDetails.AppendText($"{evt.Location}\n\n");
 
             // Organizer
-            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
-            rtbEventDetails.SelectionColor = Color.Black;
-            rtbEventDetails.AppendText("👥 Organizer:\n");
-            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
-            rtbEventDetails.SelectionColor = Color.DimGray;
-            rtbEventDetails.AppendText($"{evt.Organizer}\n\n");
+            richTextBoxEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            richTextBoxEventDetails.SelectionColor = Color.Black;
+            richTextBoxEventDetails.AppendText("👥 Organizer:\n");
+            richTextBoxEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
+            richTextBoxEventDetails.SelectionColor = Color.DimGray;
+            richTextBoxEventDetails.AppendText($"{evt.Organizer}\n\n");
 
             // Description
-            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
-            rtbEventDetails.SelectionColor = Color.Black;
-            rtbEventDetails.AppendText("📝 Description:\n");
-            rtbEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
-            rtbEventDetails.SelectionColor = Color.DimGray;
-            rtbEventDetails.AppendText($"{evt.Description}\n");
+            richTextBoxEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Bold);
+            richTextBoxEventDetails.SelectionColor = Color.Black;
+            richTextBoxEventDetails.AppendText("📝 Description:\n");
+            richTextBoxEventDetails.SelectionFont = new Font("Segoe UI", 10, FontStyle.Regular);
+            richTextBoxEventDetails.SelectionColor = Color.DimGray;
+            richTextBoxEventDetails.AppendText($"{evt.Description}\n");
 
-            rtbEventDetails.SelectionStart = 0;
-            rtbEventDetails.ScrollToCaret();
+            richTextBoxEventDetails.SelectionStart = 0;
+            richTextBoxEventDetails.ScrollToCaret();
         }
 
         private Color GetCategoryColor(string category)
@@ -264,31 +264,31 @@ namespace PROG7312_WFP
 
         private void btnViewRecommendation_Click(object sender, EventArgs e)
         {
-            if (lstRecommendations.SelectedItem is Event selectedEvent)
+            if (listBoxRecommendations.SelectedItem is Event selectedEvent)
             {
                 // Find and select this event in the main list
-                for (int i = 0; i < lstEvents.Items.Count; i++)
+                for (int i = 0; i < listBoxEvents.Items.Count; i++)
                 {
-                    if (lstEvents.Items[i] is Event evt && evt.EventId == selectedEvent.EventId)
+                    if (listBoxEvents.Items[i] is Event evt && evt.EventId == selectedEvent.EventId)
                     {
-                        lstEvents.SelectedIndex = i;
-                        lstEvents.TopIndex = i;
+                        listBoxEvents.SelectedIndex = i;
+                        listBoxEvents.TopIndex = i;
                         break;
                     }
                 }
 
                 // If not in current view, show all events and try again
-                if (lstEvents.SelectedItem == null ||
-                    (lstEvents.SelectedItem is Event currentEvt && currentEvt.EventId != selectedEvent.EventId))
+                if (listBoxEvents.SelectedItem == null ||
+                    (listBoxEvents.SelectedItem is Event currentEvt && currentEvt.EventId != selectedEvent.EventId))
                 {
                     btnClearFilters_Click(sender, e);
 
-                    for (int i = 0; i < lstEvents.Items.Count; i++)
+                    for (int i = 0; i < listBoxEvents.Items.Count; i++)
                     {
-                        if (lstEvents.Items[i] is Event evt && evt.EventId == selectedEvent.EventId)
+                        if (listBoxEvents.Items[i] is Event evt && evt.EventId == selectedEvent.EventId)
                         {
-                            lstEvents.SelectedIndex = i;
-                            lstEvents.TopIndex = i;
+                            listBoxEvents.SelectedIndex = i;
+                            listBoxEvents.TopIndex = i;
                             break;
                         }
                     }
@@ -303,7 +303,7 @@ namespace PROG7312_WFP
 
         private void chkUseDate_CheckedChanged(object sender, EventArgs e)
         {
-            dtpEventDate.Enabled = chkUseDate.Checked;
+            dateTimePickerEventDate.Enabled = chkUseDate.Checked;
         }
 
         private void UpdateStatusBar()

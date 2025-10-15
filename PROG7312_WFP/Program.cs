@@ -2,9 +2,7 @@ namespace PROG7312_WFP
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
+
         [STAThread]
         static void Main()
         {
@@ -13,7 +11,7 @@ namespace PROG7312_WFP
             ApplicationConfiguration.Initialize();
 
             // Load sample issues on startup
-            IssueSampleData.LoadSampleIssues();
+            IssueSampleData.InitializeSampleIssueData();
 
             Application.Run(new Form1());
         }
