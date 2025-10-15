@@ -1,6 +1,10 @@
 # Municipal Services Application - Simple Guide
 
-### https://github.com/VCCT-PROG7312-2025-G1/PROG7312_ST10400684_WFP 
+https://github.com/VCCT-PROG7312-2025-G1/PROG7312_ST10400684_WFP 
+
+### YT Video link
+
+https://youtu.be/96UPO6nRfqs 
 
 ## Classes Explained:
 
@@ -150,7 +154,7 @@ Lines: 256-306
 
 How it works: Analyzes which categories users search most, finds upcoming events in those categories, excludes already-viewed events, returns top 6 recommendations.
 
-
+these links listed below shows what I used AI for aswell as comments in my code showing what I used CO-Pilot for.
 ## Troubleshooting
 https://gemini.google.com/app/2b7f648e6a68ceb5 
 
