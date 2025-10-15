@@ -142,6 +142,9 @@ Variable: dateSearchFrequency
 Purpose: Counts how many times each date is searched (for recommendations)
 
 
+### Where is it saving
+
+Once ran it saves to a local file called issues.json
 
 
 ## Recommendation Algorithm
